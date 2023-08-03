@@ -14,12 +14,10 @@ const rootReducer = (state = initialState, action) => {
 	}
 };
 
-// enhancer : https://speakerdeck.com/stevekinney/redux-workshop-2021-05-05?slide=8
-// enhancers are used to customize the creation of the store
-// logStateAndPerformance enhancer
+// enhancers change the overall implementation of the store
+// middlewares : modifying actions, logging, async calls, etc.
+
 const store = createStore(
 	rootReducer,
 	compose(captureState, capturePerformance)
 );
-store.dispatch({ type: "INCREMENT" });
-store.dispatch({ type: "DECREMENT" });

@@ -1,5 +1,5 @@
 export const capturePerformance = (createStore) => {
-	return (rootReducer, initialState, enhancers) => {
+	return (rootReducer, initialState, enhancers) => { // enhancer is passed through the enhancer again to memoize
 		const captureReducer = (state, action) => {
 			const start = performance.now();
 			const newState = rootReducer(state, action);
