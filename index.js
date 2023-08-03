@@ -26,6 +26,11 @@ const decrementBy1Action = () => ({ type: DECREMENT_BY_1 });
 const decrementByValAction = (payload) => ({ type: DECREMENT_BY_VAL, payload });
 
 const store = createStore(reducer);
-console.log(store.getState());
+// multiple stores is an anti pattern. There should be one store which acts as provider
+
+const subscriber = () => console.log(store.getState());
+const unsubscribe = store.subscribe(subscriber);
 store.dispatch(incrementBy1Action());
-console.log(store.getState());
+store.dispatch(incrementByValAction(5));
+unsubscribe();
+store.dispatch(decrementBy1Action());
