@@ -1,5 +1,5 @@
 import { legacy_createStore as createStore } from "redux";
-import { logStateAndPerformance } from "./addLogging.js";
+import { captureStateAndMetrics } from "./captureStateAndMetrics.js";
 
 const initialState = { num: 1 };
 
@@ -17,5 +17,6 @@ const rootReducer = (state = initialState, action) => {
 // enhancer : https://speakerdeck.com/stevekinney/redux-workshop-2021-05-05?slide=8
 // enhancers are used to customize the creation of the store
 // logStateAndPerformance enhancer
-const store = createStore(rootReducer, logStateAndPerformance);
+const store = createStore(rootReducer, captureStateAndMetrics);
 store.dispatch({ type: "INCREMENT" });
+store.dispatch({ type: "DECREMENT" });

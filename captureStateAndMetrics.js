@@ -1,14 +1,13 @@
-export const logStateAndPerformance = (createStore) => {
+export const captureStateAndMetrics = (createStore) => {
 	return (rootReducer, initialState, enhancers) => {
-		const logReducer = (state = initialState, action) => {
+		const captureReducer = (state, action) => {
 			console.log("<<< LOGGING >>>");
 			console.log("OLD STATE : ", state);
-
 			console.log(
 				"ACTION : ",
 				action.type.startsWith("@@redux/INIT")
 					? (action.type = "@@INIT")
-					: action.type
+					: action
 			);
 
 			const start = performance.now();
@@ -17,12 +16,11 @@ export const logStateAndPerformance = (createStore) => {
 			const diff = end - start;
 
 			console.log("NEW STATE : ", newState);
+      console.log("PERFORMANCE OF REDUCER : ", diff, "ms\n");
 
-			console.log("TIME TO REDUCER : ", diff, "\n");
-
-			return newState;
+      return newState;
 		};
 
-		return createStore(logReducer, initialState, enhancers); // modifies the dispatch()
+		return createStore(captureReducer, initialState, enhancers);
 	};
 };
