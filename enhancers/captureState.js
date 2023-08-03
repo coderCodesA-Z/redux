@@ -1,4 +1,4 @@
-export const captureStateAndMetrics = (createStore) => {
+export const captureState = (createStore) => {
 	return (rootReducer, initialState, enhancers) => {
 		const captureReducer = (state, action) => {
 			console.log("<<< LOGGING >>>");
@@ -10,15 +10,11 @@ export const captureStateAndMetrics = (createStore) => {
 					: action
 			);
 
-			const start = performance.now();
 			const newState = rootReducer(state, action);
-			const end = performance.now();
-			const diff = end - start;
 
 			console.log("NEW STATE : ", newState);
-      console.log("PERFORMANCE OF REDUCER : ", diff, "ms\n");
 
-      return newState;
+			return newState;
 		};
 
 		return createStore(captureReducer, initialState, enhancers);
