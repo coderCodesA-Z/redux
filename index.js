@@ -1,4 +1,4 @@
-import { legacy_createStore as createStore } from "redux";
+import { bindActionCreators, combineReducers, legacy_createStore as createStore } from "redux";
 
 const initialState = {
 	users: [
@@ -15,24 +15,41 @@ const initialState = {
 	],
 };
 
-// if the state gets complex and we keep on adding to the same reducer, the reducer will start to become messy
-// TIME TO REFACTOR
-const reducer = (state = initialState, action) => {
+const ADD_USER = "ADD_USER";
+const ADD_TASK = "ADD_TASK";
+
+const addUser = (user) => ({
+	type: ADD_USER,
+	payload: user,
+});
+const addTask = (task) => ({
+	type: ADD_TASK,
+	payload: task,
+});
+
+const userReducer = (state = initialState.users, action) => {
 	switch (action.type) {
 		case "ADD_USER":
-			return {
-				...state,
-				users: [...state.users, action.payload],
-			};
-		case "ADD_TASK":
-			return {
-				...state,
-				tasks: [...state.tasks, action.payload],
-			};
+			return [...state, action.payload];
 		default:
 			return state;
 	}
-}
+};
 
+const taskReducer = (state = initialState.tasks, action) => {
+	switch (action.type) {
+		case "ADD_TASK":
+			return [...state, action.payload];
+		default:
+			return state;
+	}
+};
+
+const reducer = combineReducers({ user: userReducer, task: taskReducer });
 const store = createStore(reducer);
-// multiple stores is an anti pattern. There should be one store which acts as provider
+
+const action = bindActionCreators({ addUser, addTask }, store.dispatch);
+console.log(store.getState());
+action.addUser({ id: 3, name: "John" });
+action.addTask({ title: "Swim for 15min" });
+console.log(store.getState());
